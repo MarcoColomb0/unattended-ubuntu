@@ -1,0 +1,17 @@
+---
+- name: Read the content of the local hosts file
+  slurp:
+    src: assets/hosts
+  register: local_hosts_file
+  delegate_to: localhost
+
+- name: Decode and split the content of the local hosts file
+  set_fact:
+    local_hosts_lines: "{{ local_hosts_file.content | b64decode | regex_findall('([^\n]+)') }}"
+
+- name: Append content to remote /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item }}"
+    insertafter: EOF
+  with_items: "{{ local_hosts_lines }}"

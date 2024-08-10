@@ -1,0 +1,34 @@
+---
+- name: Check if timedatectl is available
+  command: which timedatectl
+  register: timedatectl_check
+  changed_when: false
+  failed_when: timedatectl_check.rc != 0
+
+- name: Get current timezone
+  command: timedatectl show --property=Timezone --value
+  register: current_timezone
+  when: timedatectl_check.rc == 0
+
+- name: Set timezone to Europe/Rome
+  command: timedatectl set-timezone Europe/Rome
+  when: timedatectl_check.rc == 0 and current_timezone.stdout != 'Europe/Rome'
+
+- name: Check if /etc/systemd/timesyncd.conf exists
+  stat:
+    path: /etc/systemd/timesyncd.conf
+  register: timesyncd_conf
+
+- name: Set NTP server to Italian pool
+  lineinfile:
+    path: /etc/systemd/timesyncd.conf
+    regexp: '^NTP='
+    line: 'NTP=it.pool.ntp.org'
+    create: yes
+  when: timesyncd_conf.stat.exists
+
+- name: Restart systemd-timesyncd service
+  systemd:
+    name: systemd-timesyncd
+    state: restarted
+  when: timesyncd_conf.stat.exists

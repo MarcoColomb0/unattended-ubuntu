@@ -5,7 +5,7 @@
 
 ## Features
 - **Clean Machine IDs**: Ensures that machine IDs are cleaned on each run to avoid conflicts.
-- **Setup Timezone**: Configures the system timezone.
+- **Setup Time**: Configures the system time settings.
 - **Setup Hosts File**: Updates the `/etc/hosts` file with necessary entries.
 - **Install Docker**: Installs Docker to facilitate containerized applications.
 - **Extensible**: New features and configurations may be added during development.

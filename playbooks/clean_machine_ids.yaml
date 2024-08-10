@@ -1,0 +1,13 @@
+---
+- name: Remove machine-id file
+  file:
+    path: /etc/machine-id
+    state: absent
+
+- name: Remove dbus' machine-id file
+  file:
+    path: /var/lib/dbus/machine-id
+    state: absent
+
+- name: Regenerate machine-id
+  command: systemd-machine-id-setup

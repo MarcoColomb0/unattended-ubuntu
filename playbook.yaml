@@ -1,0 +1,15 @@
+---
+- name: Master playbook to run other playbooks
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Clean machine IDs
+      include_tasks: playbooks/clean_machine_ids.yaml
+    - name: Setup time
+      include_tasks: playbooks/setup_time.yaml
+    - name: Hosts file
+      include_tasks: playbooks/hosts_file.yaml
+    - name: Install Docker
+      include_role:
+        name: geerlingguy.docker
