@@ -1,6 +1,6 @@
 [targets]
 postgres-1 
-#postgres-2
+postgres-2
 
 [targets:vars]
 ansible_user=marco
